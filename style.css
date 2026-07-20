@@ -1,224 +1,395 @@
+/* ==========================================================================
+   ROOT VARIABLES
+   ========================================================================== */
+:root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card-hover: #21262d;
+    --text: #f0f6fc;
+    --text-light: #b1bac4;
+    --accent: #ff004f;         /* was inconsistent: #ff3366 vs #ff004f used side by side. Unified to one color. */
+    --accent-rgb: 255, 0, 79;  /* lets us do rgba(var(--accent-rgb), .35) anywhere we need transparency */
+    --ease: cubic-bezier(.4, 0, .2, 1);
+    --nav-height: 86px;
+
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Poppins' , sans-serif;
     box-sizing: border-box;
 }
-html{
+
+html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
-body {
-    background: #080808;
-    color: #fff;
-}
+
 #header {
     width: 100%;
-    height: 100vh;
-    background-image: url(images/background.png);
+    min-height: 100vh;   /* was height:100vh — fixed height let content overflow past the section instead of the section growing to fit it */
     background-size: cover;
     background-position: center;
 }
+
+#header .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header-text {
+    font-size: 30px;
+    margin-top: auto;      /* replaces the old margin-top:30% */
+    padding-bottom: 60px;
+}
+body {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2332 45%, #2a1f3d 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: "Poppins", sans-serif;
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background: var(--accent);
+    color: #fff;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
 .container {
+    max-width: 1300px;      /* new: stops lines of text getting absurdly wide on big monitors */
+    margin: 0 auto;
     padding: 10px 10%;
 }
+
+#about,
+#services,
+#portfolio,
+#contact {
+    scroll-margin-top: var(--nav-height);
+}
+
+
+/* ==========================================================================
+   HEADER / NAV
+   ========================================================================== */
+#header {
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
 nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    padding: 18px 35px;
+    backdrop-filter: blur(15px);
+    background: rgba(22, 27, 34, .7);
+    border: 1px solid rgba(255, 255, 255, .08);
+    position: sticky;   /* new: the blur/glass styling was already begging to be a sticky nav */
+    top: 0;
+    z-index: 100;
 }
+
 .logo {
     width: 140px;
+    margin-left: 20px;
 }
+
 nav ul li {
     display: inline-block;
     list-style: none;
     margin: 10px 20px;
 }
+
 nav ul li a {
     text-decoration: none;
-    color: #fff;
     font-size: 18px;
     position: relative;
+    color: var(--text);
+
 }
+
 nav ul li a::after {
     content: '';
     width: 0%;
-    height: 3px; 
-    background: #ff004f;
+    height: 3px;
+    background: var(--accent);
     position: absolute;
     left: 0;
     bottom: -6px;
-    transition: 0.5s;
+    transition: width .4s var(--ease);
 }
-nav ul li a:hover::after{
+
+nav ul li a:hover::after {
     width: 100%;
 }
-.header-text{
-    margin-top: 20%;
+nav ul li a:hover {
+    color: var(--accent);
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.header-text {
     font-size: 30px;
+    margin-top: 25%;
 }
+
 .header-text h1 {
-    font-size: 60px;
+    font-size: clamp(2rem, 5vw + 1rem, 3.75rem); /* fluid: scales smoothly instead of jumping at breakpoints */
     margin-top: 20px;
-}
-.header-text h1 span{
-    color:#ff004f;
+    line-height: 1.15;
 }
 
-/*--------------about me-------------*/
+.header-text h1 span {
+    color: var(--accent);
+    font-weight: 1000;
+}
 
+.header-text p {
+    font-weight: 1000;
+    max-width: 600px;
+    line-height: 1.8;
+    font-size: clamp(.9rem, 1vw + .7rem, 1.05rem);
+}
+
+.header-text p span {
+    color: var(--accent);
+}
+
+.header-text h2 {
+    color: var(--accent);
+    font-size: clamp(1.25rem, 2vw + 1rem, 2rem);
+    margin: 15px 0;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   ABOUT
+   ========================================================================== */
 #about {
-    padding: 80px 0;
-    color: #ababab;
+    color: var(--text-light);
 }
-.row{
+
+.row {
     display: flex;
-    justify-content: space-between;
+    gap: 50px;
     flex-wrap: wrap;
+        align-items: flex-start;   /* was center */
+
 }
+
 .about-col-1 {
-    flex-basis: 35%;
+    flex: 1;
 }
+
 .about-col-1 img {
     width: 100%;
+    object-fit: cover;
     border-radius: 15px;
+    height: clamp(360px, 45vw, 500px);   /* was clamp(280px, 40vw, 500px) */
+
 }
+
 .about-col-2 {
-    flex-basis: 60%;
+    flex: 2;
 }
+
 .sub-title {
-    font-size: 60px;
+    margin-top: -8px;
+    font-size: clamp(1.75rem, 4vw + 1rem, 3.75rem);
     font-weight: 600;
-    color: #fff; 
+    color: #fff;
+    margin-bottom: 25px;
 }
-.tab-titles{
+
+.tab-titles {
     display: flex;
+    flex-wrap: wrap;
     margin: 20px 0 40px;
 }
-.tab-links{
+
+.tab-links {
     margin-right: 50px;
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
     position: relative;
 }
-.tab-links::after{
+
+.tab-links::after {
     content: '';
     width: 0;
     height: 3px;
-    background: #ff004f;
+    background: var(--accent);
     position: absolute;
     left: 0;
     bottom: -8px;
-    transition: 0.5s;
+    transition: width .4s var(--ease);
 }
-.tab-links.active-links::after{ 
+
+.tab-links.active-links::after {
     width: 50%;
 }
+
 .tab-contents ul li {
     list-style: none;
     margin: 10px 0;
 }
-.tab-contents ul li span{
-    color: #b54769;
+
+.tab-contents ul li span {
+    color: var(--accent);
     font-size: 14px;
 }
-.tab-contents{
+
+.tab-contents {
     display: none;
 }
-.tab-contents.active-tab{
+
+.tab-contents.active-tab {
     display: block;
 }
 
-/*-----------services---------------*/
+.about-col-2 p {
+    line-height: 1.9;
+    font-size: 17px;
+}
 
+/* ==========================================================================
+   SERVICES
+   ========================================================================== */
 #services {
     padding: 30px 0;
-    
 }
-.services-list{
+
+.services-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 40px;
     margin-top: 50px;
 }
-.services-list div{
-    background: #262626;
-    padding: 40px;
+
+.services-list div {
     font-size: 13px;
     font-weight: 300;
-    border-radius: 10px;
-    transition: background 0.5s, transform 0.5s;
+    border-radius: 18px;
+    background: var(--card);
+    border: 1px solid transparent;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    transition: background .4s var(--ease), transform .4s var(--ease), border-color .4s var(--ease);
+    padding: clamp(20px, 4vw, 40px);
 }
-.services-list div svg{
-    font-size: 50px;
+
+.services-list div svg {
     margin-bottom: 30px;
+    color: var(--accent);
+    font-size: 50px;
 }
-.services-list div h2{
+
+.services-list div h2 {
     font-size: 30px;
-    font-weight:500;
+    font-weight: 500;
     margin-bottom: 15px;
 }
-.services-list div a{
+
+.services-list div a {
     text-decoration: none;
-    color: #fff;
+    color: var(--accent);
     font-size: 12px;
     margin-top: 20px;
     display: inline-block;
 }
-.services-list div:hover{
-    background: #ff004f;
+
+.services-list div:hover {
     transform: translateY(-10px);
+    background: var(--card-hover);
+    border-color: var(--accent);
 }
 
-/*------------portfolio--------*/
-
+/* ==========================================================================
+   PORTFOLIO
+   ========================================================================== */
 #portfolio {
     padding: 50px 0;
 }
-.work-list{
+
+.work-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 40px;
     margin-top: 50px;
 }
-.work{
-    border-radius: 10px;
+
+.work {
+    border-radius: 18px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    transition: transform .4s var(--ease); /* moved here from :hover so it animates both ways smoothly */
 }
-.work img{
+
+.work img {
     width: 100%;
-    border-radius: 10px;
+    height: 300px;
+    border-radius: 18px;
     display: block;
-    transition: transform 0.5s;
+    object-fit: cover;
+    transition: transform .5s var(--ease);
 }
-.layer{
+
+.layer {
     width: 100%;
     height: 0%;
-    background: linear-gradient(rgba(0,0,0,0.6), #ff004f);
-    border-radius: 10px;
+    background: linear-gradient(rgba(13, 17, 23, .75), rgba(var(--accent-rgb), .85));
+    border-radius: 18px;
     position: absolute;
     left: 0;
     bottom: 0;
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 40px;
     text-align: center;
     font-size: 14px;
-    transition: height 0.5s;
+    transition: height .5s var(--ease);
+    padding: 0 clamp(15px, 5%, 40px);
+    overflow-y: auto;   /* safety net instead of silently clipping if text doesn't fit */
 }
-.layer h3{
-    font-weight: 500;
-    margin-bottom: 20px;
+
+.layer h3 {
+    font-weight: 1000;
+    margin-bottom: 5px;
+    font-size: clamp(14px, 4vw, 18px); 
 }
+
+.layer h4 {
+    margin-bottom: 5px;
+    font-weight: 750;
+}
+
 .layer a {
-    margin-top: 20x;
-    color: #ff004f;
+    margin-top: 20px;   /* fixed: was "20x", an invalid unit that browsers silently ignored */
+    color: var(--accent);
     font-size: 18px;
     text-decoration: none;
     line-height: 60px;
@@ -227,84 +398,137 @@ nav ul li a:hover::after{
     height: 60px;
     border-radius: 50%;
     text-align: center;
+    transition: transform .3s var(--ease);
 }
-.work:hover img{
+
+.layer a:hover {
     transform: scale(1.1);
 }
-.work:hover .layer{
+
+.work:hover img {
+    transform: scale(1.1);
+}
+
+.work:hover .layer {
     height: 100%;
 }
-.btn{
+
+.work:hover {
+    transform: translateY(-8px);
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn {
     display: block;
     margin: 50px auto;
     width: fit-content;
-    border: 1px solid #ff004f;
+    border: 1px solid var(--accent);
     padding: 14px 50px;
     border-radius: 6px;
     text-decoration: none;
-    color: #fff;
-    transition: background 0.5s;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: .5px;
+    cursor: pointer;
+    transition: background .35s var(--ease), transform .35s var(--ease), box-shadow .35s var(--ease);
 }
+
 .btn:hover {
-    background: #ff004f;
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(var(--accent-rgb), .35);
 }
 
-/*---------------contact------------*/
+.btn.btn2 {
+    background: var(--accent);
+    color: #fff;
+    display: inline-block;
+    padding: 14px 60px;
+    font-size: 18px;
+    margin-top: 20px;
+}
 
-.contact-left{
+/* ==========================================================================
+   CONTACT
+   ========================================================================== */
+.contact-left {
     flex-basis: 35%;
 }
-.contact-right{
+
+.contact-right {
     flex-basis: 60%;
 }
-.contact-left p{
+
+.contact-left p {
     margin-top: 30px;
 }
-.contact-left p svg{
-    color: #ff004f;
+
+.contact-left p svg {
+    color: var(--accent);
     margin-right: 15px;
     font-size: 25px;
 }
+
 .social-icons {
     margin-top: 30px;
+    display: flex;
+    gap: 20px;
 }
-.social-icons a{
+
+.social-icons a {
     text-decoration: none;
     font-size: 30px;
-    margin-right: 15px;
-    color: #ababab;
+    color: var(--accent);
     display: inline-block;
-    transition: transform 0.5s;
+    transition: transform .4s var(--ease), color .4s var(--ease);
 }
-.social-icons a:hover{
-    color: #ff004f;
+
+.social-icons a:hover {
+    color: #fff;
     transform: translateY(-5px);
 }
-.btn.btn2{
-    background: #ff004f;
-    display: inline-block;
-}
-.contact-right form{
+
+.contact-right form {
     width: 100%;
 }
-form input, form textarea{
+
+form input,
+form textarea {
     width: 100%;
-    border: 0;
+    border: 1px solid transparent;
     outline: none;
     background: #262626;
     padding: 15px;
     margin: 15px 0;
-    color:#fff;
+    color: var(--text);           /* fixed: was var(--accent), making typed text pink-on-pink and hard to read */
     font-size: 18px;
     border-radius: 6px;
+    transition: border-color .3s var(--ease);
 }
-form btn2{
-    padding: 14px 60px;
-    font-size: 18px;
-    margin-top: 20px;
-    cursor: pointer;
+
+form input::placeholder,
+form textarea::placeholder {
+    color: var(--text-light);
 }
-.copyright{
+
+form input:focus,
+form textarea:focus {
+    border-color: var(--accent);
+}
+
+#msg {
+    color: #61b752;
+    margin-top: -40px;
+    display: block;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.copyright {
     width: 100%;
     text-align: center;
     padding: 25px 0;
@@ -312,79 +536,210 @@ form btn2{
     font-weight: 300;
     margin-top: 20px;
 }
-.copyright svg{
-    color: #ff004f;
+
+.copyright svg {
+    color: var(--accent);
 }
 
-/*-----------css for small screen------------*/
-
-nav .fa-circle-xmark, 
-nav .fa-bars{
+/* ==========================================================================
+   NAV TOGGLE ICONS (mobile)
+   ========================================================================== */
+nav .fa-circle-xmark,
+nav .fa-bars {
     display: none;
 }
-@media only screen and (max-width: 600px){
-    #header{
-        background-image: url(images/phone-background.png);
+
+/* ==========================================================================
+   RESPONSIVE — TABLET (new breakpoint, was missing between desktop and 600px)
+   ========================================================================== */
+@media only screen and (max-width: 900px) {
+    .container {
+        padding: 10px 6%;
     }
-    .header-text{
-        margin-top: 100%;
-        font-size: 16px;
+
+    .row {
+        gap: 30px;
     }
-    .header-text h1{
-        font-size: 30px;
+
+    .about-col-1 img {
+        height: 360px;
     }
-    nav .fa-circle-xmark, 
-    nav .fa-bars{
-    display: block;
-    font-size: 25px;
+}
+@media only screen and (max-width: 600px) {
+    :root {
+        --nav-height: 60px;
     }
-    nav ul{
-    background: #ff004f;
-    position: fixed;
-    top: 0;
-    right: -200px;
-    width: 200px;
-    height: 100vh;
-    padding-top: 50px;
-    z-index: 2;
-    transition: right 0.5s;
+}
+
+/* ==========================================================================
+   RESPONSIVE — MOBILE
+   ========================================================================== */
+@media only screen and (max-width: 600px) {
+    #header {
+    width: 100%;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+@media (hover: none) {
+    .services-list div:active,
+    .btn:active,
+    .social-icons a:active {
+        transform: translateY(-6px);
+        background: var(--card-hover);
+        border-color: var(--accent);
     }
-    nav ul li{
+    .work:active .layer { height: 100%; }
+    .work:active img { transform: scale(1.08); }
+    .work.touch-active .layer { height: 100%; }
+    .work.touch-active img { transform: scale(1.1); }
+}
+#header .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header-text {
+    margin-top: auto;       /* overrides the old 20% — shoves this block to the bottom */
+    padding-bottom: 60px;   /* breathing room from the edge — adjust to taste */
+}
+
+    nav .fa-circle-xmark,
+    nav .fa-bars {
+        display: block;
+        font-size: 25px;
+    }
+
+    nav ul {
+        background: #161b22;
+        border-left: 1px solid rgba(255, 255, 255, .1);
+        position: fixed;
+        top: 0;
+        right: -200px;
+        width: 200px;
+        height: 100vh;
+        padding-top: 50px;
+        z-index: 200;
+        transition: right .5s var(--ease);
+    }
+
+    nav ul li {
         display: block;
         margin: 25px;
     }
-    nav ul .fa-circle-xmark{
+
+    nav ul .fa-circle-xmark {
         position: absolute;
         top: 25px;
         left: 25px;
         cursor: pointer;
     }
-    .sub-title{
-        font-size: 40px;
-    }
-    .about-col-1, .about-col-2{
+
+    .about-col-1,
+    .about-col-2 {
         flex-basis: 100%;
     }
-    .about-col-1{
+
+    .about-col-1 {
         margin-bottom: 30px;
     }
-    .about-col-2{
+
+    .about-col-1 img {
+        height: 320px;
+    }
+
+    .about-col-2 {
         font-size: 14px;
     }
-    .tab-links{
+
+    .tab-links {
         font-size: 16px;
         margin-right: 20px;
     }
-    .contact-left, .contact-right{
+
+    .contact-left,
+    .contact-right {
         flex-basis: 100%;
     }
-    .copyright{
-        font-size: 14px;
-    }
-}
 
-#msg{
-    color: #61b752;
-    margin-top: -40px;
-    display: block;
+    .copyright {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .services-list div {
+        padding: 25px;
+    }
+
+    .layer {
+        height: 100%;
+        background: rgba(13, 17, 23, .9);
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    form input,
+    form textarea {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    #about,
+    #services,
+    #portfolio,
+    #contact {
+        padding: 80px 0;
+    }
+
+    div nav {
+    background-size: cover;
+    background: rgba(22, 27, 34, .7);
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+    margin: 0;
+    min-height: auto;
+    }
+
+    body {
+        background: linear-gradient(135deg, #0d1117 0%, #1a2332 45%, #2a1f3d 100%);
+
+    }
+
+    .container nav {
+        margin-left: -10%;
+        margin-right: -10%;
+    }
+
+    nav {
+        padding: 12px 20px;
+    }
+
+    nav .fa-bars {
+        margin-right: 10px;
+    }
+
+    .logo {
+        width: 100px;
+    }
+    
+}
+@media only screen and (min-width: 601px) {
+    #contact .row {
+        flex-wrap: nowrap;
+    }
+    .contact-left {
+        flex: 0 0 32%;
+    }
+    .contact-right {
+        flex: 1;
+    }
 }

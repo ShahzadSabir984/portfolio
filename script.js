@@ -26,6 +26,15 @@ var sidemeu = document.getElementById("sidemenu")
         sidemeu.style.right = "-200px";
     }
 
+    document.querySelectorAll('.work').forEach(card => {
+    card.addEventListener('click', function (e) {
+        if (e.target.closest('.layer a')) return; // let the actual link still work
+        const isOpen = this.classList.contains('touch-active');
+        document.querySelectorAll('.work.touch-active').forEach(c => c.classList.remove('touch-active'));
+        if (!isOpen) this.classList.add('touch-active');
+    });
+});
+
 //----------for saving data from contact form to sheets--------
 
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyqtjEH4WcTwhI9qnozbslOa61buT2EDV-5yrz6KQBpiZe-JhxJ8bzduIQu7H3cDXvZ/exec'
@@ -45,3 +54,4 @@ const scriptURL = 'https://script.google.com/macros/s/AKfycbyqtjEH4WcTwhI9qnozbs
             })
 			.catch(error => console.error('Error!', error.message))
 	})
+
